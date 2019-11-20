@@ -128,7 +128,7 @@ public class SQLiteDataAdapter implements IDataAdapter {
         CustomerModel customer = null;
 
         try {
-            String sql = "SELECT * FROM Customers WHERE CustomerId = " + id;
+            String sql = "SELECT * FROM Customers WHERE CustomerID = " + id;
             Statement stmt = conn.createStatement();
             ResultSet rs = stmt.executeQuery(sql);
             if (rs.next()) {
@@ -150,10 +150,10 @@ public class SQLiteDataAdapter implements IDataAdapter {
             Statement stmt = conn.createStatement();
             CustomerModel c = loadCustomer(customer.mCustomerID); // check if this product exists
             if (c != null) {
-                stmt.executeUpdate("DELETE FROM Customers WHERE CustomerId = " + customer.mCustomerID);
+                stmt.executeUpdate("DELETE FROM Customers WHERE CustomerID = " + customer.mCustomerID);
             }
 
-            String sql = "INSERT INTO Customers(CustomerId, Name, Phone, Address) VALUES " + customer;
+            String sql = "INSERT INTO Customers(CustomerID, Name, Phone, Address) VALUES " + customer;
             System.out.println(sql);
 
             stmt.executeUpdate(sql);
