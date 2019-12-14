@@ -1,3 +1,4 @@
+import java.util.List;
 
 public interface IDataAdapter {
 
@@ -19,6 +20,7 @@ public interface IDataAdapter {
     public static final int PURCHASE_SAVED_FAILED = 502;
     public static final int PURCHASE_DUPLICATE_ERROR = 501;
 
+
     public int connect(String dbfile);
     public int disconnect();
 
@@ -27,8 +29,16 @@ public interface IDataAdapter {
 
     public CustomerModel loadCustomer(int id);
     public int saveCustomer(CustomerModel model);
+//    public int saveCustomer(CustomerModel model);
 //
-    public PurchaseModel loadPurchase(int id);
+//    public int loadPurchase(int id);
+public PurchaseModel loadPurchase(int id);
     public int savePurchase(PurchaseModel model);
 
+    public PurchaseListModel loadPurchaseHistory(int customerID);
+
+    public ProductListModel searchProduct(String name, double minPrice, double maxPrice);
+
+    public UserModel loadUser(String username);
+    //public int saveUser(UserModel user);
 }
