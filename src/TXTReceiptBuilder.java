@@ -27,5 +27,4 @@ public class TXTReceiptBuilder implements IReceiptBuilder {
     public void appendFooter(String footer) {
         sb.append(footer).append("\n");
     }
-
 }

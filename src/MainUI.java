@@ -32,9 +32,9 @@ public class MainUI {
         view.getContentPane().add(title);
 
         JPanel panelButtons = new JPanel(new FlowLayout());
-       // panelButtons.add(btnAddProduct);
-        //panelButtons.add(btnAddCustomer);
-        //panelButtons.add(btnAddPurchase);
+        panelButtons.add(btnAddProduct);
+        panelButtons.add(btnAddCustomer);
+        panelButtons.add(btnAddPurchase);
         panelButtons.add(btnUpdateProduct);
         panelButtons.add(btnUpdateCustomer);
         panelButtons.add(btnUpdatePurchase);

@@ -1,4 +1,12 @@
-import java.sql.*;
+
+import java.sql.Connection;
+import java.sql.Statement;
+import java.sql.ResultSet;
+
+import java.sql.DriverManager;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class SQLiteDataAdapter implements IDataAdapter {
 
@@ -35,12 +43,12 @@ public class SQLiteDataAdapter implements IDataAdapter {
         ProductModel product = null;
 
         try {
-            String sql = "SELECT ProductID, Name, Price, Quantity FROM Products WHERE ProductID = " + productID;
+            String sql = "SELECT ProductId, Name, Price, Quantity FROM Products WHERE ProductId = " + productID;
             Statement stmt = conn.createStatement();
             ResultSet rs = stmt.executeQuery(sql);
             if (rs.next()) {
                 product = new ProductModel();
-                product.mProductID = rs.getInt("ProductID");
+                product.mProductID = rs.getInt("ProductId");
                 product.mName = rs.getString("Name");
                 product.mPrice = rs.getDouble("Price");
                 product.mQuantity = rs.getDouble("Quantity");
@@ -59,7 +67,7 @@ public class SQLiteDataAdapter implements IDataAdapter {
                 stmt.executeUpdate("DELETE FROM Products WHERE ProductID = " + product.mProductID);
             }
 
-            String sql = "INSERT INTO Products(ProductID, Name, Price, Quantity) VALUES " + product;
+            String sql = "INSERT INTO Products(ProductId, Name, Price, Quantity) VALUES " + product;
             System.out.println(sql);
 
             stmt.executeUpdate(sql);
@@ -103,14 +111,9 @@ public class SQLiteDataAdapter implements IDataAdapter {
     @Override
     public int savePurchase(PurchaseModel purchase) {
         try {
-            Statement stmt = conn.createStatement();
-            PurchaseModel p = loadPurchase(purchase.mPurchaseID); // check if this product exists
-            if (p != null) {
-                stmt.executeUpdate("DELETE FROM Purchases WHERE PurchaseID = " + p.mPurchaseID);
-            }
-            String sql = "INSERT INTO Purchases VALUES " + p;
+            String sql = "INSERT INTO Purchases VALUES " + purchase;
             System.out.println(sql);
-           // Statement stmt = conn.createStatement();
+            Statement stmt = conn.createStatement();
             stmt.executeUpdate(sql);
 
         } catch (Exception e) {
@@ -124,11 +127,12 @@ public class SQLiteDataAdapter implements IDataAdapter {
 
     }
 
+  /**  @Override
     public CustomerModel loadCustomer(int id) {
         CustomerModel customer = null;
 
         try {
-            String sql = "SELECT * FROM Customers WHERE CustomerID = " + id;
+            String sql = "SELECT * FROM Customers WHERE CustomerId = " + id;
             Statement stmt = conn.createStatement();
             ResultSet rs = stmt.executeQuery(sql);
             if (rs.next()) {
@@ -143,17 +147,18 @@ public class SQLiteDataAdapter implements IDataAdapter {
             System.out.println(e.getMessage());
         }
         return customer;
-    }
+    } **/
 
+    @Override
     public int saveCustomer(CustomerModel customer) {
         try {
             Statement stmt = conn.createStatement();
             CustomerModel c = loadCustomer(customer.mCustomerID); // check if this product exists
             if (c != null) {
-                stmt.executeUpdate("DELETE FROM Customers WHERE CustomerID = " + customer.mCustomerID);
+                stmt.executeUpdate("DELETE FROM Customers WHERE CustomerId = " + customer.mCustomerID);
             }
 
-            String sql = "INSERT INTO Customers(CustomerID, Name, Phone, Address) VALUES " + customer;
+            String sql = "INSERT INTO Customers(CustomerId, Name, Phone, Address) VALUES " + customer;
             System.out.println(sql);
 
             stmt.executeUpdate(sql);
@@ -166,6 +171,101 @@ public class SQLiteDataAdapter implements IDataAdapter {
         }
 
         return CUSTOMER_SAVED_OK;
+    }
+
+    @Override
+    public PurchaseListModel loadPurchaseHistory(int id) {
+        PurchaseListModel res = new PurchaseListModel();
+        try {
+            String sql = "SELECT * FROM Purchases WHERE CustomerId = " + id;
+            Statement stmt = conn.createStatement();
+            ResultSet rs = stmt.executeQuery(sql);
+            while (rs.next()) {
+                PurchaseModel purchase = new PurchaseModel();
+                purchase.mCustomerID = id;
+                purchase.mPurchaseID = rs.getInt("PurchaseID");
+                purchase.mProductID = rs.getInt("ProductID");
+                purchase.mPrice = rs.getDouble("Price");
+                purchase.mQuantity = rs.getDouble("Quantity");
+                purchase.mCost = rs.getDouble("Cost");
+                purchase.mTax = rs.getDouble("Tax");
+                purchase.mTotal = rs.getDouble("Total");
+                purchase.mDate = rs.getString("Date");
+
+                res.purchases.add(purchase);
+            }
+
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+        return res;
+    }
+
+    @Override
+    public ProductListModel searchProduct(String name, double minPrice, double maxPrice) {
+        ProductListModel res = new ProductListModel();
+        try {
+            String sql = "SELECT * FROM Products WHERE Name LIKE \'%" + name + "%\' "
+                    + "AND Price >= " + minPrice + " AND Price <= " + maxPrice;
+            Statement stmt = conn.createStatement();
+            ResultSet rs = stmt.executeQuery(sql);
+            while (rs.next()) {
+                ProductModel product = new ProductModel();
+                product.mProductID = rs.getInt("ProductID");
+                product.mName = rs.getString("Name");
+                product.mPrice = rs.getDouble("Price");
+                product.mQuantity = rs.getDouble("Quantity");
+                res.products.add(product);
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return res;
+    }
+
+    public CustomerModel loadCustomer(int id) {
+        CustomerModel customer = null;
+
+        try {
+            String sql = "SELECT * FROM Customers WHERE CustomerId = " + id;
+            Statement stmt = conn.createStatement();
+            ResultSet rs = stmt.executeQuery(sql);
+            if (rs.next()) {
+                customer = new CustomerModel();
+                customer.mCustomerID = id;
+                customer.mName = rs.getString("Name");
+                customer.mPhone = rs.getString("Phone");
+                customer.mAddress = rs.getString("Address");
+            }
+
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+        return customer;
+    }
+
+    public UserModel loadUser(String username) {
+        UserModel user = null;
+
+        try {
+            String sql = "SELECT * FROM Users WHERE Username = \"" + username + "\"";
+            Statement stmt = conn.createStatement();
+            ResultSet rs = stmt.executeQuery(sql);
+            if (rs.next()) {
+                user = new UserModel();
+                user.mUsername = username;
+                user.mPassword = rs.getString("Password");
+                user.mFullname = rs.getString("Fullname");
+                user.mUserType = rs.getInt("Usertype");
+                if (user.mUserType == UserModel.CUSTOMER)
+                    user.mCustomerID = rs.getInt("CustomerID");
+            }
+
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+        return user;
     }
 
 }

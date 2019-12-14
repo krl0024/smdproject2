@@ -26,7 +26,7 @@ public class AddPurchaseUI {
     public JLabel labProductName = new JLabel("Product Name: ");
 
     public JLabel labCost = new JLabel("Cost: $0.00 ");
-    //  public JLabel labTax = new JLabel("Tax: $0.00");
+    public JLabel labTax = new JLabel("Tax: $0.00");
     public JLabel labTotalCost = new JLabel("Total Cost: $0.00");
 
     ProductModel product;
@@ -66,11 +66,11 @@ public class AddPurchaseUI {
         line.add(labPrice);
         view.getContentPane().add(line);
 
-        /**  line = new JPanel(new FlowLayout());
-         line.add(labCost);
-         line.add(labTax);
-         line.add(labTotalCost);
-         view.getContentPane().add(line); **/
+        line = new JPanel(new FlowLayout());
+        line.add(labCost);
+        line.add(labTax);
+        line.add(labTotalCost);
+        view.getContentPane().add(line);
 
         line = new JPanel(new FlowLayout());
         line.add(btnAdd);
@@ -236,11 +236,11 @@ public class AddPurchaseUI {
             }
 
             purchase.mCost = purchase.mQuantity * product.mPrice;
-            purchase.mTax = purchase.mCost;// * 0.09;
+            purchase.mTax = purchase.mCost * 0.09;
             purchase.mTotal = purchase.mCost + purchase.mTax;
 
             labCost.setText("Cost: $" + String.format("%8.2f", purchase.mCost).trim());
-            //labTax.setText("Tax: $" + String.format("%8.2f", purchase.mTax).trim());
+            labTax.setText("Tax: $" + String.format("%8.2f", purchase.mTax).trim());
             labTotalCost.setText("Total: $" + String.format("%8.2f", purchase.mTotal).trim());
 
         }
@@ -265,13 +265,11 @@ public class AddPurchaseUI {
                 return;
             }
 
-
-            switch (StoreManager.getInstance().getDataAdapter().savePurchase(purchase)) {
-                case SQLiteDataAdapter.PURCHASE_DUPLICATE_ERROR:
-                    JOptionPane.showMessageDialog(null, "Purchase NOT added successfully! Duplicate product ID!");
-                default:
-                    JOptionPane.showMessageDialog(null, "Purchase added successfully!" + purchase);
-            }
+            int res = StoreManager.getInstance().getDataAdapter().savePurchase(purchase);
+            if (res == SQLiteDataAdapter.PURCHASE_SAVED_FAILED)
+                JOptionPane.showMessageDialog(null, "Purchase NOT added successfully! Duplicate product ID!");
+            else
+                JOptionPane.showMessageDialog(null, "Purchase added successfully!" + purchase);
         }
     }
 

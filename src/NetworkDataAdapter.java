@@ -1,5 +1,8 @@
 import com.google.gson.Gson;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class NetworkDataAdapter implements IDataAdapter {
 
     String host = "localhost";
@@ -27,7 +30,7 @@ public class NetworkDataAdapter implements IDataAdapter {
         msg.code = MessageModel.GET_PRODUCT;
         msg.data = Integer.toString(id);
         try {
-            msg = adapter.send(msg, host, port);
+            msg = adapter.exchange(msg, host, port);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -45,7 +48,7 @@ public class NetworkDataAdapter implements IDataAdapter {
         msg.data = gson.toJson(model);
 
         try {
-            msg = adapter.send(msg, host, port);
+            msg = adapter.exchange(msg, host, port);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -73,5 +76,60 @@ public class NetworkDataAdapter implements IDataAdapter {
     @Override
     public int savePurchase(PurchaseModel model) {
         return 0;
+    }
+
+    @Override
+    public PurchaseListModel loadPurchaseHistory(int customerID) {
+        msg.code = MessageModel.GET_PURCHASE_LIST;
+        msg.data = Integer.toString(customerID);
+
+        try {
+            msg = adapter.exchange(msg, host, port);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        if (msg.code == MessageModel.OPERATION_FAILED)
+            return null;
+        else {
+            return gson.fromJson(msg.data, PurchaseListModel.class);
+        }
+    }
+
+    @Override
+    public ProductListModel searchProduct(String name, double minPrice, double maxPrice) {
+        msg.code = MessageModel.SEARCH_PRODUCT;
+        msg.data = "name";
+
+        try {
+            msg = adapter.exchange(msg, host, port);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        if (msg.code == MessageModel.OPERATION_FAILED)
+            return null;
+        else {
+
+            return gson.fromJson(msg.data, ProductListModel.class);
+        }
+    }
+
+    @Override
+    public UserModel loadUser(String username) {
+        msg.code = MessageModel.GET_USER;
+        msg.data = username;
+        try {
+            msg = adapter.exchange(msg, host, port);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        if (msg.code == MessageModel.OPERATION_FAILED)
+            return null;
+        else {
+            return gson.fromJson(msg.data, UserModel.class);
+        }
+
     }
 }

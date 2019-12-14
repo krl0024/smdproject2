@@ -139,7 +139,7 @@ public class AddCustomerUI {
                         //String te = txt.appendHeader("Customer Added \r\n") + txt.appendCustomer(customer) + txt.appendFooter("\r\n Thank you!\r\n");
 
 
-                        File f1 = new File("C:\\Users\\Katie\\Desktop\\Fall 2019\\SM&D\\act12\\customers\\" + customer.mCustomerID + ".txt");
+                        File f1 = new File("/Users/kaitlynmerklein/store.db" + customer.mCustomerID + ".txt");
                         if(!f1.exists()) {
                             f1.createNewFile();
                         }

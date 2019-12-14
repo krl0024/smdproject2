@@ -1,3 +1,5 @@
+import com.google.gson.Gson;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -21,7 +23,7 @@ public class ManageCustomerUI {
 
         view.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
-        view.setTitle("Update Customer Information");
+        view.setTitle("Manage Customer Information");
         view.setSize(600, 400);
         view.getContentPane().setLayout(new BoxLayout(view.getContentPane(), BoxLayout.PAGE_AXIS));
 
@@ -46,7 +48,7 @@ public class ManageCustomerUI {
         view.getContentPane().add(line3);
 
         JPanel line4 = new JPanel(new FlowLayout());
-        line4.add(new JLabel("Quantity "));
+        line4.add(new JLabel("Address "));
         line4.add(txtAddress);
         view.getContentPane().add(line4);
 
@@ -65,7 +67,7 @@ public class ManageCustomerUI {
 
         @Override
         public void actionPerformed(ActionEvent actionEvent) {
-            CustomerModel customer = new CustomerModel();
+            Gson gson = new Gson();
             String id = txtCustomerID.getText();
 
             if (id.length() == 0) {
@@ -74,75 +76,96 @@ public class ManageCustomerUI {
             }
 
             try {
-                customer.mCustomerID = Integer.parseInt(id);
+                int i = Integer.parseInt(id);
             } catch (NumberFormatException e) {
                 JOptionPane.showMessageDialog(null, "CustomerID is invalid!");
                 return;
             }
 
-            // call data access!
 
-            customer = StoreManager.getInstance().getDataAdapter().loadCustomer(customer.mCustomerID);
+            try {
 
-            if (customer == null) {
-                JOptionPane.showMessageDialog(null, "Customer NOT exists!");
-            } else {
-                txtName.setText(customer.mName);
-                txtPhone.setText(customer.mPhone);
-                txtAddress.setText(customer.mAddress);
+                MessageModel msg = new MessageModel();
+                msg.code = MessageModel.GET_CUSTOMER;
+                msg.data = id;
+
+//                msg = StoreManager.getInstance().getNetworkAdapter().send(msg, "localhost", 1000);
+
+                if (msg.code == MessageModel.OPERATION_FAILED) {
+                    JOptionPane.showMessageDialog(null, "Customer NOT exists!");
+                }
+                else {
+                    CustomerModel customer = gson.fromJson(msg.data, CustomerModel.class);
+                    txtName.setText(customer.mName);
+                    txtPhone.setText(customer.mPhone);
+                    txtAddress.setText(customer.mAddress);
+                }
+
+            } catch (Exception e) {
+                e.printStackTrace();
             }
+
         }
     }
 
     class SaveButtonListener implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent actionEvent) {
-            CustomerModel customer = new CustomerModel();
+            ProductModel product = new ProductModel();
+            Gson gson = new Gson();
             String id = txtCustomerID.getText();
 
             if (id.length() == 0) {
-                JOptionPane.showMessageDialog(null, "CustomerID cannot be null!");
+                JOptionPane.showMessageDialog(null, "ProductID cannot be null!");
                 return;
             }
 
             try {
-                customer.mCustomerID = Integer.parseInt(id);
+                product.mProductID = Integer.parseInt(id);
             } catch (NumberFormatException e) {
-                JOptionPane.showMessageDialog(null, "CustomerID is invalid!");
+                JOptionPane.showMessageDialog(null, "ProductID is invalid!");
                 return;
             }
 
             String name = txtName.getText();
             if (name.length() == 0) {
-                JOptionPane.showMessageDialog(null, "Customer name cannot be empty!");
+                JOptionPane.showMessageDialog(null, "Product name cannot be empty!");
                 return;
             }
 
-            customer.mName = name;
+            product.mName = name;
 
-            String phone = txtPhone.getText();
+            String price = txtPhone.getText();
             try {
-                customer.mPhone = phone;
+                product.mPrice = Double.parseDouble(price);
             } catch (NumberFormatException e) {
-                JOptionPane.showMessageDialog(null, "Phone is invalid!");
+                JOptionPane.showMessageDialog(null, "Price is invalid!");
                 return;
             }
 
-            String add = txtAddress.getText();
+            String quant = txtAddress.getText();
             try {
-                customer.mAddress = add;
+                product.mQuantity = Double.parseDouble(quant);
             } catch (NumberFormatException e) {
-                JOptionPane.showMessageDialog(null, "Address is invalid!");
+                JOptionPane.showMessageDialog(null, "Quantity is invalid!");
                 return;
             }
 
+            try {
+                MessageModel msg = new MessageModel();
+                msg.code = MessageModel.PUT_PRODUCT;
+                msg.data = gson.toJson(product);
 
-            int  res = StoreManager.getInstance().getDataAdapter().saveCustomer(customer);
+//                msg = StoreManager.getInstance().getNetworkAdapter().send(msg, "localhost", 1000);
 
-            if (res == IDataAdapter.CUSTOMER_SAVED_FAILED)
-                JOptionPane.showMessageDialog(null, "Customer is NOT saved successfully!");
-            else
-                JOptionPane.showMessageDialog(null, "Customer is SAVED successfully!");
+                if (msg.code == MessageModel.OPERATION_FAILED)
+                    JOptionPane.showMessageDialog(null, "Product is NOT saved successfully!");
+                else
+                    JOptionPane.showMessageDialog(null, "Product is SAVED successfully!");
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
     }
 }
