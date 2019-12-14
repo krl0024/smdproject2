@@ -10,6 +10,7 @@ public class ManagerUI {
 //    public JButton btnManageCustomer = new JButton("Manage Customers");
     public JButton btnManageProduct = new JButton("Manage Products");
     public JButton btnSalesSummary = new JButton("Sales Summary");
+    public JButton btnManageProfile = new JButton("Update Profile");
 
     public ManagerUI() {
         this.view = new JFrame();
@@ -28,6 +29,7 @@ public class ManagerUI {
         panelButtons.add(btnManageProduct);
        // panelButtons.add(btnManageCustomer);
         panelButtons.add(btnSalesSummary);
+        panelButtons.add(btnManageProfile);
 
         view.getContentPane().add(panelButtons);
 
@@ -51,8 +53,9 @@ public class ManagerUI {
         btnSalesSummary.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
-                SalesSummaryUI ss = new SalesSummaryUI();
-              //  ui.run();
+                UserModel u = new UserModel();
+                SalesSummaryUI ss = new SalesSummaryUI(u);
+                ss.run();
             }
         });
 

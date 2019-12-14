@@ -9,6 +9,7 @@ public class CashierUI {
     public JButton btnAddPurchase = new JButton("Add New Purchase");
     public JButton btnManageCustomer = new JButton("Manage Customers");
     public JButton btnUpdatePurchase = new JButton("Update Purchase");
+    public JButton btnManageProfile = new JButton("Manage Profile");
 
     public CashierUI() {
         this.view = new JFrame();
@@ -27,6 +28,7 @@ public class CashierUI {
         panelButtons.add(btnAddPurchase);
         panelButtons.add(btnManageCustomer);
         panelButtons.add(btnUpdatePurchase);
+        panelButtons.add(btnManageProfile);
 
 
         view.getContentPane().add(panelButtons);
@@ -55,5 +57,14 @@ public class CashierUI {
                 up.run();
             }
         });
+
+        btnManageProfile.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+               ManageProfileUI mp = new ManageProfileUI();
+                mp.run();
+            }
+        });
+
     }
 }

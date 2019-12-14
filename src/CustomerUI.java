@@ -13,6 +13,8 @@ public class CustomerUI {
    // public JButton btnCancelPurchase = new JButton("Cancel a Purchase");
     public JButton btnViewPurchases = new JButton("View Purchase History");
     public JButton btnSearchProduct = new JButton("Search Product");
+    public JButton btnManageProfile= new JButton("Update Profile");
+
 
     public CustomerUI(UserModel user) {
 
@@ -41,6 +43,7 @@ public class CustomerUI {
         panelButtons.add(btnViewPurchases);
      //   panelButtons.add(btnCancelPurchase);
         panelButtons.add(btnSearchProduct);
+        panelButtons.add(btnManageProfile);
 
         view.getContentPane().add(panelButtons);
 

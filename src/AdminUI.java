@@ -8,7 +8,8 @@ public class AdminUI {
 
     public JButton btnSysConfig = new JButton("System Configuration");
     public JButton btnAddUser = new JButton("Add New User");
-    public JButton btnDeleteUser = new JButton("Update User");
+    public JButton btnManageUser = new JButton("Update User");
+    public JButton btnManageProfile = new JButton("Manage Profile");
 
     public AdminUI(UserModel user) {
         this.view = new JFrame();
@@ -33,7 +34,8 @@ public class AdminUI {
         JPanel panelButtons = new JPanel(new FlowLayout());
         panelButtons.add(btnSysConfig);
         panelButtons.add(btnAddUser);
-        panelButtons.add(btnDeleteUser);
+        panelButtons.add(btnManageUser);
+        panelButtons.add(btnManageProfile);
 
 
         view.getContentPane().add(panelButtons);
@@ -55,7 +57,7 @@ public class AdminUI {
             }
         });
 
-        btnDeleteUser.addActionListener(new ActionListener() {
+        btnManageUser.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
                ManageUserUI mu = new ManageUserUI();
