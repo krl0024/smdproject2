@@ -13,7 +13,7 @@ public class ProductSearchUI {
 
 
         public ProductSearchUI() {
-           // this.user = user;
+            // this.user = user;
 
             this.view = new JFrame();
 
@@ -23,12 +23,14 @@ public class ProductSearchUI {
             view.setSize(600, 400);
             view.getContentPane().setLayout(new BoxLayout(view.getContentPane(), BoxLayout.PAGE_AXIS));
 
-            JLabel title = new JLabel("Search results for " + user.mFullname);
+            JLabel title = new JLabel("Search results for Test User" );
 
-            title.setFont (title.getFont().deriveFont (24.0f));
+            title.setFont(title.getFont().deriveFont(24.0f));
             title.setHorizontalAlignment(SwingConstants.CENTER);
             view.getContentPane().add(title);
-
+        }
+        void run() {
+            view.setVisible(true);
             ProductListModel list = StoreManager.getInstance().getDataAdapter().searchProduct("Apple", 0, 10000);
             DefaultTableModel tableData = new DefaultTableModel();
 

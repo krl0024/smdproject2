@@ -60,8 +60,8 @@ public class CustomerUI {
         btnMakePurchase.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
-                ManageCustomerUI ui = new ManageCustomerUI();
-                ui.run();
+                AddPurchaseUI ap = new AddPurchaseUI();
+                ap.run();
             }
         });
 
@@ -71,6 +71,27 @@ public class CustomerUI {
                 //UserModel u = this.user;
                 ProductSearchUI ui = new ProductSearchUI();
                 ui.view.setVisible(true);
+            }
+        } );
+
+
+        btnSearchProduct.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                //UserModel u = this.user;
+                ProductSearchUI ui = new ProductSearchUI();
+
+                ui.view.setVisible(true);
+                ui.run();
+            }
+        } );
+        btnManageProfile.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                //UserModel u = this.user;
+                UserModel u = new UserModel();
+                ManageProfileUI mp = new ManageProfileUI(u);
+                mp.view.setVisible(true);
             }
         } );
 
