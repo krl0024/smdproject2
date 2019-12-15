@@ -59,5 +59,14 @@ public class ManagerUI {
             }
         });
 
+        btnManageProfile.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                UserModel u = new UserModel();
+                ManageProfileUI mp = new ManageProfileUI(u);
+                mp.run();
+            }
+        });
+
     }
 }

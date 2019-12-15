@@ -1,5 +1,7 @@
 import java.util.List;
 
+import java.util.ArrayList;
+
 public interface IDataAdapter {
 
     public static final int CONNECTION_OPEN_OK = 100;
@@ -36,6 +38,8 @@ public PurchaseModel loadPurchase(int id);
     public int savePurchase(PurchaseModel model);
 
     public PurchaseListModel loadPurchaseHistory(int customerID);
+
+    public ArrayList<PurchaseModel>  loadPurchaseHistory();
 
     public ProductListModel searchProduct(String name, double minPrice, double maxPrice);
 

@@ -1,5 +1,7 @@
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
+import java.util.ArrayList;
+
 
 public class PurchaseHistoryUI {
 
@@ -35,7 +37,7 @@ public class PurchaseHistoryUI {
         title.setHorizontalAlignment(SwingConstants.CENTER);
         view.getContentPane().add(title);
 
-        PurchaseListModel list = StoreManager.getInstance().getDataAdapter().loadPurchaseHistory(user.mCustomerID);
+        ArrayList<PurchaseModel> list = StoreManager.getInstance().getDataAdapter().loadPurchaseHistory();
 //        DefaultListModel<String> data = new DefaultListModel<>();
         DefaultTableModel tableData = new DefaultTableModel();
 //        String[] columnNames = {"PurchaseID", "ProductID", "Total"};
@@ -49,7 +51,7 @@ public class PurchaseHistoryUI {
         tableData.addColumn("Product Name");
         tableData.addColumn("Total");
 
-        for (PurchaseModel purchase : list.purchases) {
+        for (PurchaseModel purchase : list) {
             Object[] row = new Object[tableData.getColumnCount()];
             row[0] = purchase.mPurchaseID;
             row[1] = purchase.mProductID;

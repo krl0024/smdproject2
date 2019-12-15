@@ -1,6 +1,8 @@
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
+import java.util.ArrayList;
+
 
 public class SalesSummaryUI {
     public JFrame view;
@@ -45,7 +47,9 @@ public class SalesSummaryUI {
             //title.setHorizontalAlignment(SwingConstants.CENTER);
             //view.getContentPane().add(title);
 
-            PurchaseListModel list = StoreManager.getInstance().getDataAdapter().loadPurchaseHistory(123);
+
+       /** ArrayList<PurchaseModel> list = StoreManager.getInstance().getDataAdapter().loadPurchaseHistory();
+           // PurchaseListModel list = StoreManager.getInstance().getDataAdapter().loadPurchaseHistory(123);
 //        DefaultListModel<String> data = new DefaultListModel<>();
             DefaultTableModel tableData = new DefaultTableModel();
 //        String[] columnNames = {"PurchaseID", "ProductID", "Total"};
@@ -59,7 +63,7 @@ public class SalesSummaryUI {
             tableData.addColumn("Product Name");
             tableData.addColumn("Total");
 
-            for (PurchaseModel purchase : list.purchases) {
+            for (PurchaseModel purchase : list) {
                 Object[] row = new Object[tableData.getColumnCount()];
                 row[0] = purchase.mPurchaseID;
                 row[1] = purchase.mProductID;
@@ -75,7 +79,7 @@ public class SalesSummaryUI {
 
             JScrollPane scrollableList = new JScrollPane(purchaseTable);
 
-            view.getContentPane().add(scrollableList);
+            view.getContentPane().add(scrollableList);**/
 
 
         }
@@ -85,6 +89,40 @@ public class SalesSummaryUI {
 
     public void run() {
         view.setVisible(true);
+        ArrayList<PurchaseModel> list = StoreManager.getInstance().getDataAdapter().loadPurchaseHistory();
+        // PurchaseListModel list = StoreManager.getInstance().getDataAdapter().loadPurchaseHistory(123);
+//        DefaultListModel<String> data = new DefaultListModel<>();
+        DefaultTableModel tableData = new DefaultTableModel();
+//        String[] columnNames = {"PurchaseID", "ProductID", "Total"};
+//        data.addElement(String.format("PurchaseId: %d, ProductId: %d, Total: %8.2f",
+//                purchase.mPurchaseID,
+//                purchase.mProductID,
+//                purchase.mTotal));
+
+        tableData.addColumn("PurchaseID");
+        tableData.addColumn("ProductID");
+        tableData.addColumn("Product Name");
+        tableData.addColumn("Total");
+
+        for (PurchaseModel purchase : list) {
+            Object[] row = new Object[tableData.getColumnCount()];
+            row[0] = purchase.mPurchaseID;
+            row[1] = purchase.mProductID;
+            ProductModel product = StoreManager.getInstance().getDataAdapter().loadProduct(purchase.mProductID);
+            row[2] = product.mName;
+            row[3] = purchase.mTotal;
+            tableData.addRow(row);
+        }
+
+//        purchases = new JList(data);
+
+        purchaseTable = new JTable(tableData);
+
+        JScrollPane scrollableList = new JScrollPane(purchaseTable);
+
+        view.getContentPane().add(scrollableList);
+
+
     }
 
 

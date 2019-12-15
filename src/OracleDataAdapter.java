@@ -1,4 +1,8 @@
 import java.util.List;
+import com.google.gson.reflect.TypeToken;
+
+import java.lang.reflect.Type;
+import java.util.ArrayList;
 
 public class OracleDataAdapter implements IDataAdapter {
     public int connect(String dbfile) {
@@ -32,6 +36,10 @@ public class OracleDataAdapter implements IDataAdapter {
     public PurchaseModel loadPurchase(int id) {return null;}
     @Override
     public PurchaseListModel loadPurchaseHistory(int customerID) {
+        return null;
+    }
+
+    public ArrayList<PurchaseModel> loadPurchaseHistory() {
         return null;
     }
 

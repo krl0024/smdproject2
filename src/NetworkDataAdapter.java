@@ -1,5 +1,6 @@
 import com.google.gson.Gson;
-
+import com.google.gson.reflect.TypeToken;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -95,6 +96,27 @@ public class NetworkDataAdapter implements IDataAdapter {
             return gson.fromJson(msg.data, PurchaseListModel.class);
         }
     }
+
+    @Override
+    public ArrayList<PurchaseModel> loadPurchaseHistory() {
+
+        Type listOfPurchaseModel = new TypeToken<ArrayList<PurchaseModel>>() {}.getType();
+        msg.code = MessageModel.GET_PURCHASE_LIST;
+        //msg.data = Integer.toString(customerID);
+        ArrayList<PurchaseModel> hist = gson.fromJson(msg.data, listOfPurchaseModel);
+        try {
+            msg = adapter.exchange(msg, host, port);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        if (msg.code == MessageModel.OPERATION_FAILED)
+            return null;
+        else {
+            return hist;
+        }
+    }
+
 
     @Override
     public ProductListModel searchProduct(String name, double minPrice, double maxPrice) {
