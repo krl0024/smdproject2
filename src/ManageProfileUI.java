@@ -143,15 +143,15 @@ public class ManageProfileUI {
             try {
                 purchase.mPurchaseID = Integer.parseInt(id);
             } catch (NumberFormatException e) {
-                JOptionPane.showMessageDialog(null, "PurchaseID is invalid!");
+                JOptionPane.showMessageDialog(null, "Full name updated to: ");
                 return;
             }
 
             int res = StoreManager.getInstance().getDataAdapter().savePurchase(purchase);
             if (res == SQLiteDataAdapter.PURCHASE_SAVED_FAILED)
-                JOptionPane.showMessageDialog(null, "Purchase NOT added successfully! Duplicate product ID!");
+                JOptionPane.showMessageDialog(null, "NOT Updated successfully! ");
             else
-                JOptionPane.showMessageDialog(null, "Purchase added successfully!" + purchase);
+                JOptionPane.showMessageDialog(null, "User Updated successfully!" );
         }
     }
 }
